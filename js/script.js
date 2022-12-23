@@ -99,8 +99,8 @@ window.addEventListener('DOMContentLoaded', () => {
         // Modal window. Лекция 72
     
     const modalTrigger = document.querySelectorAll('[data-modal]'), //72 - 2:25. Кнопки открытия окна.
-        modal = document.querySelector('.modal'), //72 - 3:30. Само модальное окно.
-        modalCloseBtn = document.querySelector('[data-close]');  //72 - 3:45. Кнопка закрытия модального окна.
+        modal = document.querySelector('.modal')/*, //72 - 3:30. Само модальное окно.
+        modalCloseBtn = document.querySelector('[data-close]')$Лекция 85. 7:35$*/;  //72 - 3:45. Кнопка закрытия модального окна. 
 
     function openModal() {       // Лекция 73. 1:15
         modal.classList.add('show');
@@ -124,11 +124,11 @@ window.addEventListener('DOMContentLoaded', () => {
         document.body.style.overflow = ''; //72 - 7:55. Прокрутка при Закрытии окна.
     }
 
-    modalCloseBtn.addEventListener('click', closeModal); //72 - 6:05. Закрытие окна. 15:40 Оптимизация кода.
+    /*modalCloseBtn.addEventListener('click', closeModal);$Лекция 85. 7:35$*/ //72 - 6:05. Закрытие окна. 15:40 Оптимизация кода.
         
 
     modal.addEventListener('click', (e) => {  //72 - 11:30. Закрытие модального окна по клику вне самого окна.
-        if (e.target === modal) {  //Размер модального окна в Классе modal - составояет 100% высоты и ширины в CSS.
+        if (e.target === modal || e.target.getAttribute('data-close') == '') {  //Размер модального окна в Классе modal - составояет 100% высоты и ширины в CSS. $Лекция 85. 8:25$
             closeModal();   //15:50 Оптимизация кода.
         }
     });
@@ -138,7 +138,7 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     });
     
-    const modalTimerId = setTimeout(openModal, 5000);  //таймер всплытия модального окна. Лекция 73.
+    const modalTimerId = setTimeout(openModal, 50000);  //таймер всплытия модального окна. Лекция 73.
 
     function showModalByCcroll() {//Лекция 73. 3:50. 9:40.
         if (window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight) {
@@ -237,7 +237,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const forms = document.querySelectorAll('form');
 
     const message = {
-        loading: 'Загрузка',
+        loading: /*'Загрузка'$Лекция 85. 16:55.$*/'img/Forms/spinner.svg',   //Лекция 85. 16:55.
         success: 'Спасибо! Скоро мы с Вами свяжемся.',
         failure: 'Что-то пошло не так...'
     };
@@ -250,10 +250,14 @@ window.addEventListener('DOMContentLoaded', () => {
         form.addEventListener('submit', (e) => {
             e.preventDefault();
 
-            let statusMessage = document.createElement('div');
-            statusMessage.classList.add('status');
-            statusMessage.textContent = message.loading;
-            form.appendChild(statusMessage); 
+            let statusMessage = document.createElement('img'); //Лекция 85. 17:20.
+            statusMessage.src = message.loading/*classList.add('status')*/;//Лекция 85. 17:20.
+            statusMessage.style.cssText = `     
+                display: block;
+                margin: 0 auto;
+            `/*textContent = message.loading*/;//Лекция 85. 18:37.
+            //form.appendChild(statusMessage);  Лекция 85. 23:00.
+            form.insertAdjacentElement('afterend', statusMessage);  //Лекция 85. 22:30.
             
             const request = new XMLHttpRequest();
             request.open('POST', 'server.php');
@@ -271,16 +275,42 @@ window.addEventListener('DOMContentLoaded', () => {
             request.addEventListener('load', () => {
                 if (request.status === 200) {
                     console.log(request.response);
-                    statusMessage.textContent = message.success;
+                    /*statusMessage.textContent = $Лекция 85. 12:25$*/showThanksModal(message.success);//Лекция 85. 12:25
                     form.reset();
-                    setTimeout(() => {
+                    //setTimeout(() => {   Лекция 85. 12:25
                         statusMessage.remove();
-                    }, 2000);
+                    //}, 2000);    Лекция 85. 12:25
                 } else {
-                    statusMessage.textContent = message.failure;
+                    /*statusMessage.textContent = $Лекция 85. 13:00$*/showThanksModal(message.failure);//Лекция 85. 13:00
                 }
             });
         });
+    }
+
+    //Окно оповещения пользователя. Лекция 85. 2:40
+
+
+    function showThanksModal(massage) {
+        const prevModalDilog = document.querySelector('.modal__dialog');
+        prevModalDilog.classList.add('hide'); // Лекция 85. 4:10
+
+        openModal();
+        const thanksModal = document.createElement('div');
+        thanksModal.classList.add('modal__dialog');
+        thanksModal.innerHTML = `
+            <div class='modal__content'>
+                <div data-close class="modal__close">&times;</div>
+                <div class="modal__title">${massage}</div>
+            </div>
+        `;
+        document.querySelector('.modal').append(thanksModal);// Лекция 85. 9:20.
+        setTimeout(() => {
+            thanksModal.remove();
+            prevModalDilog.classList.add('show');
+            prevModalDilog.classList.remove('hide');
+            closeModal();
+        }, 5000);
+        
     }
 
 });
