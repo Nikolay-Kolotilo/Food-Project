@@ -259,31 +259,45 @@ window.addEventListener('DOMContentLoaded', () => {
             //form.appendChild(statusMessage);  Лекция 85. 23:00.
             form.insertAdjacentElement('afterend', statusMessage);  //Лекция 85. 22:30.
             
-            const request = new XMLHttpRequest();
-            request.open('POST', 'server.php');
-            request.setRequestHeader('Content-type', 'application/json; charset=utf-8'); //Лекция 84. 21:10
             const formData = new FormData(form);
 
             const object = {};
             formData.forEach(function(value, key) {
                 object[key] = value;
             });                
-            const json = JSON.stringify(object);
 
-            request.send(json);
-
-            request.addEventListener('load', () => {
-                if (request.status === 200) {
-                    console.log(request.response);
-                    /*statusMessage.textContent = $Лекция 85. 12:25$*/showThanksModal(message.success);//Лекция 85. 12:25
-                    form.reset();
-                    //setTimeout(() => {   Лекция 85. 12:25
-                        statusMessage.remove();
-                    //}, 2000);    Лекция 85. 12:25
-                } else {
-                    /*statusMessage.textContent = $Лекция 85. 13:00$*/showThanksModal(message.failure);//Лекция 85. 13:00
-                }
+            fetch('server1.php', {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json'
+                },
+                body: JSON.stringify(object)
+            })
+                .then(data => data.text())
+                .then(data => {
+                console.log(data);
+                /*statusMessage.textContent = $Лекция 85. 12:25$*/
+                showThanksModal(message.success);//Лекция 85. 12:25
+                //setTimeout(() => {   Лекция 85. 12:25
+                statusMessage.remove();
+            }).catch(() => {
+                showThanksModal(message.failure);
+            }).finally(() => {
+                form.reset();
             });
+
+            // request.addEventListener('load', () => {
+            //     if (request.status === 200) {
+            //         console.log(request.response);
+            //         /*statusMessage.textContent = $Лекция 85. 12:25$*/showThanksModal(message.success);//Лекция 85. 12:25
+            //         form.reset();
+            //         //setTimeout(() => {   Лекция 85. 12:25
+            //             statusMessage.remove();
+            //         //}, 2000);    Лекция 85. 12:25
+            //     } else {
+            //         /*statusMessage.textContent = $Лекция 85. 13:00$*/showThanksModal(message.failure);//Лекция 85. 13:00
+            //     }
+            // });
         });
     }
 
