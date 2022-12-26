@@ -167,6 +167,7 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     }
     new MenuCardDelete('.menu__item').del();
+
     
             //Классы для карточек.
     class MenuCard {
@@ -205,32 +206,56 @@ window.addEventListener('DOMContentLoaded', () => {
             this.parent.append(element);
         }
     }
-    new MenuCard(
-        "img/tabs/vegy.jpg",
-        "vegy",
-        'Меню "Фитнес"',
-        'Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!',
-        9,
-        '.menu .container',
-    ).render();
 
-    new MenuCard(
-        "img/tabs/elite.jpg",
-        "elite",
-        'Меню "Премиум"',
-        'В меню “Премиум” мы используем не только красивый дизайн упаковки, но и качественное исполнение блюд. Красная рыба, морепродукты, фрукты - ресторанное меню без похода в ресторан!',
-        20,
-        '.menu .container'
-    ).render();   
+                //Lec_90 17:50 Получение карточек меню с сервера.
+    const getResource = async (url) => {
+        const res = await fetch(url);
+        if (!res.ok) {
+            throw new Error(`Could not fetch ${url}, status ${res.status}`);
+        } 
+        return await res.json(); 
+    };   
+                //Lec_90 21:25 Получение карточек меню с сервера.
+    getResource('http://localhost:3000/menu')
+        .then(data => { // деструктуризация объекта
+            data.forEach( ({img, altimg, title, descr, price})   => {
+                new MenuCard(img, altimg, title, descr, price, '.menu .container' // Ввод данных при деструктуризации объекта.
+                    // obj.img, //Lec_90. 25:00
+                    // obj.altimg,
+                    // obj.title,
+                    // obj.descr,
+                    // obj.price,                    
+                ).render();
+            });        
+        });
+ // Формирование карточек мануально без конструктора описано 'Lec_90_Async_Await (ES8)_Getting data from server.js'. 27:25.
+
+    // new MenuCard( //Lec_90 21:25
+    //     "img/tabs/vegy.jpg",
+    //     "vegy",
+    //     'Меню "Фитнес"',
+    //     'Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!',
+    //     9,
+    //     '.menu .container',
+    // ).render();
+
+    // new MenuCard(
+    //     "img/tabs/elite.jpg",
+    //     "elite",
+    //     'Меню "Премиум"',
+    //     'В меню “Премиум” мы используем не только красивый дизайн упаковки, но и качественное исполнение блюд. Красная рыба, морепродукты, фрукты - ресторанное меню без похода в ресторан!',
+    //     20,
+    //     '.menu .container'
+    // ).render();   
     
-    new MenuCard(
-        "img/tabs/post.jpg",
-        "post",
-        'Меню "Премиум"',
-        'Меню “Постное” - это тщательный подбор ингредиентов: полное отсутствие продуктов животного происхождения, молоко из миндаля, овса, кокоса или гречки, правильное количество белков за счет тофу и импортных вегетарианских стейков.',
-        16,
-        '.menu .container'
-    ).render();    
+    // new MenuCard(
+    //     "img/tabs/post.jpg",
+    //     "post",
+    //     'Меню "Премиум"',
+    //     'Меню “Постное” - это тщательный подбор ингредиентов: полное отсутствие продуктов животного происхождения, молоко из миндаля, овса, кокоса или гречки, правильное количество белков за счет тофу и импортных вегетарианских стейков.',
+    //     16,
+    //     '.menu .container'
+    // ).render();    
     
     //// Forms
 
@@ -243,10 +268,21 @@ window.addEventListener('DOMContentLoaded', () => {
     };
     
     forms.forEach(item => {
-        postData(item);
+        bindPostData(item);
     });
 
-    function postData(form) {
+    const postData = async (url, data) => {//Lec_90 4:05
+        const res = await fetch(url, {//Lec_90 5:05
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: data
+        });
+        return await res.json(); 
+    };    
+
+    function bindPostData(form) {
         form.addEventListener('submit', (e) => {
             e.preventDefault();
 
@@ -261,19 +297,23 @@ window.addEventListener('DOMContentLoaded', () => {
             
             const formData = new FormData(form);
 
-            const object = {};
-            formData.forEach(function(value, key) {
-                object[key] = value;
-            });                
+            // const object = {};   //Lec_90 14:10
+            // formData.forEach(function(value, key) {
+            //     object[key] = value;
+            // });     
+            ////Lec_90 14:10
+            const json = JSON.stringify(Object.fromEntries(formData.entries())); //Берем Форм дату, превращаем 
+            // в Массив массивов, затем в объект массивов и получаем json.
 
-            fetch('server1.php', {
-                method: 'POST',
-                headers: {
-                    'Content-type': 'application/json'
-                },
-                body: JSON.stringify(object)
-            })
-                .then(data => data.text())
+            // fetch('server1.php', {  //Lec_90 11:50
+            //     method: 'POST',
+            //     headers: {
+            //         'Content-type': 'application/json'
+            //     },
+            //     body: JSON.stringify(object)
+            // })
+            postData('http://localhost:3000/requests', json) // Lec_90 11:25, 15:50
+                // .then(data => data.text()) // Lec_90 12:30
                 .then(data => {
                 console.log(data);
                 /*statusMessage.textContent = $Лекция 85. 12:25$*/
