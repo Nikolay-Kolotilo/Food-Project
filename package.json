@@ -1,0 +1,22 @@
+{
+  "name": "food-project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nikolay-Kolotilo/Food-Project.git"
+  },
+  "author": "Nikolay Kolotilo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Nikolay-Kolotilo/Food-Project/issues"
+  },
+  "homepage": "https://github.com/Nikolay-Kolotilo/Food-Project#readme",
+  "devDependencies": {
+    "json-server": "^0.17.1"
+  }
+}
