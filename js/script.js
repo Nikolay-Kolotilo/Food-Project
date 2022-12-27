@@ -216,18 +216,28 @@ window.addEventListener('DOMContentLoaded', () => {
         return await res.json(); 
     };   
                 //Lec_90 21:25 Получение карточек меню с сервера.
-    getResource('http://localhost:3000/menu')
-        .then(data => { // деструктуризация объекта
-            data.forEach( ({img, altimg, title, descr, price})   => {
-                new MenuCard(img, altimg, title, descr, price, '.menu .container' // Ввод данных при деструктуризации объекта.
-                    // obj.img, //Lec_90. 25:00
-                    // obj.altimg,
-                    // obj.title,
-                    // obj.descr,
-                    // obj.price,                    
+    // getResource('http://localhost:3000/menu')//Lec_91 5:10
+    //     .then(data => { // деструктуризация объекта
+    //         data.forEach( ({img, altimg, title, descr, price})   => {
+    //             new MenuCard(img, altimg, title, descr, price, '.menu .container' // Ввод данных при деструктуризации объекта.
+    //                 // obj.img, //Lec_90. 25:00
+    //                 // obj.altimg,
+    //                 // obj.title,
+    //                 // obj.descr,
+    //                 // obj.price,                    
+    //             ).render();
+    //         });        
+    //     });
+    
+    //Lec_91 5:10 Применение библиотеки axios в проете Food..
+    axios.get('http://localhost:3000/menu')
+        .then(data => {   //Lec_91 7:20.
+            data.data.forEach(({ img, altimg, title, descr, price }) => {
+                new MenuCard(img, altimg, title, descr, price, '.menu .container'
                 ).render();
-            });        
+            });
         });
+    
  // Формирование карточек мануально без конструктора описано 'Lec_90_Async_Await (ES8)_Getting data from server.js'. 27:25.
 
     // new MenuCard( //Lec_90 21:25
