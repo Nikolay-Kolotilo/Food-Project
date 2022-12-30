@@ -380,61 +380,78 @@ window.addEventListener('DOMContentLoaded', () => {
         .then(data => data.json())
         .then(res => console.log(res));
     
-    //Lec_92 Организация Слайдера.
-    const arrowPrev = document.querySelector(".offer__slider-prev"),
-        arrowNext = document.querySelector(".offer__slider-next"),
-        totalItem = document.querySelectorAll(".offer__slide"),
-        counterTotal = totalItem.length,
-        currentId = document.getElementById('current'),
-        totalId = document.getElementById('total');
-    let countNumber = 1;
+    //Lec_92 Организация Слайдера. See lec 92 by myself.
+    //Lec_93. Carousel (Взамен лекции 92.). Вариант слайдера в виде карусели.
+    const slides = document.querySelectorAll(".offer__slide"),
+        prev = document.querySelector(".offer__slider-prev"),
+        next = document.querySelector(".offer__slider-next"),
+        total = document.querySelector('#total'),
+        current = document.querySelector('#current'),
+        slidesWrapper = document.querySelector('.offer__slider-wrapper'),
+        slidesField = document.querySelector('.offer__slider-inner'),
+        width = window.getComputedStyle(slidesWrapper).width;
+    
+    let slideIndex = 1,
+        ofset = 0;
 
-    //Lec_92 counter
-    function sliderCounter(number) {
-        if (number < 1) {
-            number = number + totalItem.length;
-        }
-        if (number > totalItem.length) {
-            number = number%totalItem.length;
-        } 
-        countNumber = number;
-        return countNumber;
-    }
-    sliderCounter(countNumber);
-    console.log(countNumber);
+    console.log(slidesWrapper);
+    console.log(width);
+    if (slides.length < 10) {
+        total.textContent = `0${slides.length}`;
+        current.textContent = `0${slideIndex}`;
+    } else {
+        total.textContent = slides.length;
+        current.textContent = slideIndex;
+    } 
 
-    //Lec_92 sliderShow
-    function sliderShow(numberOfSlide, totalItem, currentId) {
-        totalItem.forEach(item => item.classList.add('hide'));
-        totalItem[numberOfSlide - 1].classList.remove('hide');
-        totalItem[numberOfSlide - 1].classList.add('show');
-        document.querySelector('.offer__slider-wrapper').append(totalItem[numberOfSlide -1]);
-        if (numberOfSlide < 10) {
-            currentId.innerHTML = `0${numberOfSlide}`;
-        } else {
-            currentId.innerHTML = numberOfSlide;
-        }        
-        if (counterTotal < 10 ) {
-            totalId.innerHTML = `0${counterTotal}`;
-        } else {
-            totalId.innerHTML = counterTotal;
-        }
-    }
-    sliderShow(countNumber, totalItem, currentId);
+    slidesField.style.width = 100 * slides.length + '%';
+    slidesField.style.display = 'flex';
+    slidesField.style.transition = '0.5s all';
 
-    arrowPrev.addEventListener('click', (e) => {
-        e.preventDefault();
-        countNumber = countNumber - 1;
-        sliderCounter(countNumber);
-        // console.log(countNumber);
-        sliderShow(countNumber, totalItem, currentId);
+    slidesWrapper.style.overflow = 'hidden';
+
+    slides.forEach(slide => {
+        slide.style.width = width;
     });
-    arrowNext.addEventListener('click', (e) => {
-        e.preventDefault();
-        countNumber++;
-        sliderCounter(countNumber);
-        // console.log(countNumber);
-        sliderShow(countNumber, totalItem, currentId);
+
+    next.addEventListener('click', () => {
+        if (ofset == +width.slice(0, width.length - 2)*(slides.length - 1) ) { //Превращение  width (650px) в 650.
+            ofset = 0;
+        } else { //14:50.
+            ofset += +width.slice(0, width.length - 2);
+        }
+        slidesField.style.transform = `translateX(-${ofset}px)`;
+
+        if (slideIndex == slides.length) {
+            slideIndex = 1;
+        } else {
+            slideIndex++;
+        } 
+        if (slides.length < 10 ) {
+            current.textContent = `0${slideIndex}`;
+        } else {
+            current.textContent = slideIndex;
+        } 
+    });
+
+    prev.addEventListener('click', () => {
+        if (ofset == 0) { 
+            ofset = +width.slice(0, width.length - 2) * (slides.length - 1);
+        } else { //14:50.
+            ofset -= +width.slice(0, width.length - 2);
+        }
+        slidesField.style.transform = `translateX(-${ofset}px)`;
+
+        if (slideIndex == 1) {
+            slideIndex = slides.length;
+        } else {
+            slideIndex--;
+        } 
+        if (slides.length < 10 ) {
+            current.textContent = `0${slideIndex}`;
+        } else {
+            current.textContent = slideIndex;
+        } 
     });
 });
 
