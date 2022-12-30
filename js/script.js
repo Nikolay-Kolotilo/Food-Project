@@ -352,9 +352,7 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
     //Окно оповещения пользователя. Лекция 85. 2:40
-
-
-    function showThanksModal(massage) {
+    function showThanksModal(message) {
         const prevModalDilog = document.querySelector('.modal__dialog');
         prevModalDilog.classList.add('hide'); // Лекция 85. 4:10
 
@@ -364,7 +362,7 @@ window.addEventListener('DOMContentLoaded', () => {
         thanksModal.innerHTML = `
             <div class='modal__content'>
                 <div data-close class="modal__close">&times;</div>
-                <div class="modal__title">${massage}</div>
+                <div class="modal__title">${message}</div>
             </div>
         `;
         document.querySelector('.modal').append(thanksModal);// Лекция 85. 9:20.
@@ -381,6 +379,62 @@ window.addEventListener('DOMContentLoaded', () => {
     fetch('http://localhost:3000/menu')
         .then(data => data.json())
         .then(res => console.log(res));
-});
+    
+    //Lec_92 Организация Слайдера.
+    const arrowPrev = document.querySelector(".offer__slider-prev"),
+        arrowNext = document.querySelector(".offer__slider-next"),
+        totalItem = document.querySelectorAll(".offer__slide"),
+        counterTotal = totalItem.length,
+        currentId = document.getElementById('current'),
+        totalId = document.getElementById('total');
+    let countNumber = 1;
 
+    //Lec_92 counter
+    function sliderCounter(number) {
+        if (number < 1) {
+            number = number + totalItem.length;
+        }
+        if (number > totalItem.length) {
+            number = number%totalItem.length;
+        } 
+        countNumber = number;
+        return countNumber;
+    }
+    sliderCounter(countNumber);
+    console.log(countNumber);
+
+    //Lec_92 sliderShow
+    function sliderShow(numberOfSlide, totalItem, currentId) {
+        totalItem.forEach(item => item.classList.add('hide'));
+        totalItem[numberOfSlide - 1].classList.remove('hide');
+        totalItem[numberOfSlide - 1].classList.add('show');
+        document.querySelector('.offer__slider-wrapper').append(totalItem[numberOfSlide -1]);
+        if (numberOfSlide < 10) {
+            currentId.innerHTML = `0${numberOfSlide}`;
+        } else {
+            currentId.innerHTML = numberOfSlide;
+        }        
+        if (counterTotal < 10 ) {
+            totalId.innerHTML = `0${counterTotal}`;
+        } else {
+            totalId.innerHTML = counterTotal;
+        }
+    }
+    sliderShow(countNumber, totalItem, currentId);
+
+    arrowPrev.addEventListener('click', (e) => {
+        e.preventDefault();
+        countNumber = countNumber - 1;
+        sliderCounter(countNumber);
+        // console.log(countNumber);
+        sliderShow(countNumber, totalItem, currentId);
+    });
+    arrowNext.addEventListener('click', (e) => {
+        e.preventDefault();
+        countNumber++;
+        sliderCounter(countNumber);
+        // console.log(countNumber);
+        sliderShow(countNumber, totalItem, currentId);
+    });
+});
 
