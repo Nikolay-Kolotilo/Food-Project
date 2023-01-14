@@ -464,10 +464,10 @@ window.addEventListener('DOMContentLoaded', () => {
 
 
     next.addEventListener('click', () => {
-        if (ofset == +width.slice(0, width.length - 2)*(slides.length - 1) ) { //Превращение  width (650px) в 650.
+        if (ofset == clearingForNumbers(width)/*Lec_96. 20:40. Оптимизация Кода*/ *(slides.length - 1) ) { //Превращение  width (650px) в 650.
             ofset = 0;
         } else { //14:50.
-            ofset += +width.slice(0, width.length - 2);
+            ofset += clearingForNumbers(width)/*Lec_96. 20:40. Оптимизация Кода*/;
         }
         slidesField.style.transform = `translateX(-${ofset}px)`;
 
@@ -476,20 +476,23 @@ window.addEventListener('DOMContentLoaded', () => {
         } else {
             slideIndex++;
         } 
-        if (slides.length < 10 ) {
-            current.textContent = `0${slideIndex}`;
-        } else {
-            current.textContent = slideIndex;
-        } 
-        dots.forEach(dot => dot.style.opacity = '.5'); //Lec_94. 10:00 Назначение класса активности событию.
-        dots[slideIndex - 1].style.opacity = '1';
+        // if (slides.length < 10 ) {
+        //     current.textContent = `0${slideIndex}`;
+        // } else {
+        //     current.textContent = slideIndex;
+        // }             
+        addZero();//Lec_96. 20:40. Оптимизация Кода - сокращение повторений кода.
+        
+        // dots.forEach(dot => dot.style.opacity = '.5'); //Lec_94. 10:00 Назначение класса активности событию.
+        // dots[slideIndex - 1].style.opacity = '1';
+        addStyleDots();
     });
 
     prev.addEventListener('click', () => {
         if (ofset == 0) { 
-            ofset = +width.slice(0, width.length - 2) * (slides.length - 1);
+            ofset = clearingForNumbers(width)/*Lec_96. 20:40. Оптимизация Кода*/ * (slides.length - 1);
         } else { //14:50.
-            ofset -= +width.slice(0, width.length - 2);
+            ofset -= clearingForNumbers(width)/*Lec_96. 20:40. Оптимизация Кода*/;
         }
         slidesField.style.transform = `translateX(-${ofset}px)`;
 
@@ -498,13 +501,16 @@ window.addEventListener('DOMContentLoaded', () => {
         } else {
             slideIndex--;
         } 
-        if (slides.length < 10 ) {
-            current.textContent = `0${slideIndex}`;
-        } else {
-            current.textContent = slideIndex;
-        } 
-        dots.forEach(dot => dot.style.opacity = '.5'); //Lec_94. 10:55 Назначение класса активности событию.
-        dots[slideIndex - 1].style.opacity = '1';
+        // if (slides.length < 10 ) {
+        //     current.textContent = `0${slideIndex}`;
+        // } else {
+        //     current.textContent = slideIndex;
+        // }             
+        addZero();//Lec_96. 20:40. Оптимизация Кода - сокращение повторений кода.
+        
+        // dots.forEach(dot => dot.style.opacity = '.5'); //Lec_94. 10:55 Назначение класса активности событию.
+        // dots[slideIndex - 1].style.opacity = '1';
+        addStyleDots();
     });
 
     //Lec_94. 11:20. Добавление события на точки.
@@ -513,20 +519,39 @@ window.addEventListener('DOMContentLoaded', () => {
             const slideTo = e.target.getAttribute('data-slide-to');// Lec_94. 11:50. Получение значения атрибута.
 
             slideIndex = slideTo;// Lec_94. 12:30. Присваивание индексу значения атрибута полученного ранее.
-            ofset = +width.slice(0, width.length - 2) * (slideTo - 1); //Lec_94. 12:50. Передаижение по галлерее.
+            ofset = clearingForNumbers(width)/*Lec_96. 20:40. Оптимизация Кода*/ * (slideTo - 1); //Lec_94. 12:50. Передвижение по галлерее.
             slidesField.style.transform = `translateX(-${ofset}px)`;
+
+            // if (slides.length < 10 ) {
+            //     current.textContent = `0${slideIndex}`;
+            // } else {
+            //     current.textContent = slideIndex;
+            // }             
+            addZero();//Lec_96. 20:40. Оптимизация Кода - сокращение повторений кода.
             
-            if (slides.length < 10 ) {//Lec_94. 13:50. Применение счетчика на точках.
-                current.textContent = `0${slideIndex}`;
-            } else {
-                current.textContent = slideIndex;
-            } 
-            dots.forEach(dot => dot.style.opacity = '.5'); //Lec_94. 13:40. Изменение отображения точек.
-            dots[slideIndex - 1].style.opacity = '1';
-            
+            // dots.forEach(dot => dot.style.opacity = '.5'); //Lec_94. 13:40. Изменение отображения точек.
+            // dots[slideIndex - 1].style.opacity = '1';
+            addStyleDots();
 
         });
     });
+    
+    function addZero() {//Lec_96. 20:40. Оптимизация Кода - сокращение повторений кода.
+        if (slides.length < 10) {//Lec_94. 13:50. Применение счетчика на точках.
+            current.textContent = `0${slideIndex}`;
+        } else {
+            current.textContent = slideIndex;
+        } 
+    }
 
+    function addStyleDots() {//Lec_96. 20:40. Оптимизация Кода - сокращение повторений кода.
+        dots.forEach(dot => dot.style.opacity = '.5'); 
+        dots[slideIndex - 1].style.opacity = '1';
+    }
+
+    function clearingForNumbers(numberSting) {//Lec_96. 20:40. Оптимизация Кода - сокращение повторений кода.
+        let number = +numberSting.replace(/\D/g, '');
+        return number;
+    }
+    // console.log(clearingForNumbers(width));
 });
-
