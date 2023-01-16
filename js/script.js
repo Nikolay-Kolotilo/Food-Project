@@ -554,4 +554,68 @@ window.addEventListener('DOMContentLoaded', () => {
         return number;
     }
     // console.log(clearingForNumbers(width));
+
+    //Calc Lec_97. 3:50
+    const result = document.querySelector('.calculating__result span');
+    
+    let sex = 'female', height, weight, age, ratio = '1.375';
+
+    function calcTotal() {//Lec_97. 8:00
+        if (!sex || !height || !weight || !age || !ratio) {
+            result.textContent = "____";
+            return;
+        }
+        if (sex === "female") { //Lec_97. 9:40
+            result.textContent = Math.round((447.6 + (9.2 * weight) + (3.1 * height) - (4.3 * age)) * ratio);
+        } else {
+            result.textContent = Math.round((88.36 + (13.4 * weight) + (4.8 * height) - (5.7 * age)) * ratio);
+        }
+    }
+    calcTotal(); //Lec_97. 12:00 Проверка работоспособности функции
+
+    function getStaticInformation(parentSelector, activeClass) { //Lec_97. 12:45
+        const elements = document.querySelectorAll(`${parentSelector} div`);
+
+        elements.forEach(elem => {
+            elem.addEventListener('click', (e) => {//Lec_97. 14:10
+            if (e.target.getAttribute('data-ratio')) {
+                ratio = e.target.getAttribute('data-ratio');
+            } else {
+                sex = e.target.getAttribute('id');                
+            }
+            console.log(ratio, sex); //Lec_97. 16:35 Проверка правильности получения атрибутов.
+
+            elements.forEach(elem => {
+                elem.classList.remove(activeClass);                
+            });
+            e.target.classList.add(activeClass);
+            calcTotal();
+            });             
+        });
+    }
+    getStaticInformation('#gender', 'calculating__choose-item_active');
+    getStaticInformation('.calculating__choose_big', 'calculating__choose-item_active');
+
+    function getDinamicInformation(selector) {//Lec_97. 20:00 Работа с элементами ввода данных.
+        const input = document.querySelector(selector);
+
+        input.addEventListener('input', () => {
+            switch(input.getAttribute('id')) {
+                case 'height':
+                    height = +input.value;
+                    break;
+                case 'weight':
+                    weight = +input.value;
+                    break;
+                case 'age':
+                    age = +input.value;
+                    break;                
+            }
+            calcTotal();            
+        });
+        
+    }
+    getDinamicInformation('#height');
+    getDinamicInformation('#weight');
+    getDinamicInformation('#age');
 });
