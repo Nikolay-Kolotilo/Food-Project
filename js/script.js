@@ -557,8 +557,37 @@ window.addEventListener('DOMContentLoaded', () => {
 
     //Calc Lec_97. 3:50
     const result = document.querySelector('.calculating__result span');
-    
-    let sex = 'female', height, weight, age, ratio = '1.375';
+
+    let sex, height, weight, age, ratio;
+      //Lec_98. 6:50  
+    if (localStorage.getItem('sex')) {
+        sex = localStorage.getItem('sex');
+    } else {
+        sex = 'female';
+        localStorage.setItem('sex', 'female');
+    }
+
+    if (localStorage.getItem('ratio')) {
+        ratio = localStorage.getItem('ratio');
+    } else {
+        ratio = 1.375;
+        localStorage.setItem('ratio', 1.375);
+    }
+
+    function initLocalSettings(selector, activeClass) { //Lec_98. 9:40
+        const elements = document.querySelectorAll(selector);
+        elements.forEach((elem) => {
+            elem.classList.remove(activeClass);
+            if (elem.getAttribute('id') === localStorage.getItem('sex')) {
+                elem.classList.add(activeClass);
+            }
+            if (elem.getAttribute('data-ratio') === localStorage.getItem('ratio')) {
+                elem.classList.add(activeClass);
+            }
+        });
+    }
+    initLocalSettings('#gender div', 'calculating__choose-item_active');//Lec_98. 15:05
+    initLocalSettings('.calculating__choose_big div', 'calculating__choose-item_active');
 
     function calcTotal() {//Lec_97. 8:00
         if (!sex || !height || !weight || !age || !ratio) {
@@ -573,15 +602,17 @@ window.addEventListener('DOMContentLoaded', () => {
     }
     calcTotal(); //Lec_97. 12:00 Проверка работоспособности функции
 
-    function getStaticInformation(parentSelector, activeClass) { //Lec_97. 12:45
-        const elements = document.querySelectorAll(`${parentSelector} div`);
+    function getStaticInformation(Selector, activeClass) { //Lec_97. 12:45
+        const elements = document.querySelectorAll(Selector);
 
         elements.forEach(elem => {
             elem.addEventListener('click', (e) => {//Lec_97. 14:10
             if (e.target.getAttribute('data-ratio')) {
-                ratio = e.target.getAttribute('data-ratio');
+                ratio = +e.target.getAttribute('data-ratio');
+                localStorage.setItem('ratio', +e.target.getAttribute('data-ratio')); //Lec_98. 5:00
             } else {
-                sex = e.target.getAttribute('id');                
+                sex = e.target.getAttribute('id');  
+                localStorage.setItem('sex', e.target.getAttribute('id')); //Lec_98. 5:00
             }
             console.log(ratio, sex); //Lec_97. 16:35 Проверка правильности получения атрибутов.
 
@@ -593,13 +624,19 @@ window.addEventListener('DOMContentLoaded', () => {
             });             
         });
     }
-    getStaticInformation('#gender', 'calculating__choose-item_active');
-    getStaticInformation('.calculating__choose_big', 'calculating__choose-item_active');
+    getStaticInformation('#gender div', 'calculating__choose-item_active');
+    getStaticInformation('.calculating__choose_big div', 'calculating__choose-item_active');
 
     function getDinamicInformation(selector) {//Lec_97. 20:00 Работа с элементами ввода данных.
         const input = document.querySelector(selector);
 
         input.addEventListener('input', () => {
+
+            if (input.value.match(/\D/g)) { //Lec_98. 2:35 Подсветка красной рамкой при ошибке.
+                input.style.border = '1px solid red';
+            } else {
+                input.style.border = 'none';
+            }
             switch(input.getAttribute('id')) {
                 case 'height':
                     height = +input.value;
@@ -619,3 +656,26 @@ window.addEventListener('DOMContentLoaded', () => {
     getDinamicInformation('#weight');
     getDinamicInformation('#age');
 });
+
+
+    const p1 = new Promise((resolve, reject) => {
+      setTimeout(resolve, 1000, "one");
+    });
+    const p2 = new Promise((resolve, reject) => {
+      setTimeout(resolve, 2000, "two");
+    });
+    const p3 = new Promise((resolve, reject) => {
+      setTimeout(resolve, 3000, "three");
+    });
+    const p4 = new Promise((resolve, reject) => {
+      setTimeout(resolve, 4000, "four");
+    });
+    const p5 = new Promise((resolve, reject) => {
+      reject("reject");
+    });
+     
+    Promise.all([p1, p2, p3, p4, p5]).then(value => {
+      console.log(value);
+    }, reason => {
+      console.log(reason)
+    });
