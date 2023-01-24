@@ -1,14 +1,14 @@
-function slider() {
+function slider({container, slide, nextArrow, prevArrow, totalCounter, currentCounter, wrapper, field} ) { //Lec_104 29:00  Используем деструктуризацию.
     //Lec_92 Организация Слайдера. See lec 92 by myself.
     //Lec_93. Carousel (Взамен лекции 92.). Вариант слайдера в виде карусели.
-    const slides = document.querySelectorAll(".offer__slide"),
-        slider = document.querySelector('.offer__slider'), //Lec_94. 2:00 Создаем контейнер для слайдера.
-        prev = document.querySelector(".offer__slider-prev"),
-        next = document.querySelector(".offer__slider-next"),
-        total = document.querySelector('#total'),
-        current = document.querySelector('#current'),
-        slidesWrapper = document.querySelector('.offer__slider-wrapper'),
-        slidesField = document.querySelector('.offer__slider-inner'),
+    const slides = document.querySelectorAll(slide),
+        slider = document.querySelector(container), //Lec_94. 2:00 Создаем контейнер для слайдера.
+        prev = document.querySelector(prevArrow),
+        next = document.querySelector(nextArrow),
+        total = document.querySelector(totalCounter),
+        current = document.querySelector(currentCounter),
+        slidesWrapper = document.querySelector(wrapper),
+        slidesField = document.querySelector(field),
         width = window.getComputedStyle(slidesWrapper).width;
     
     let slideIndex = 1,
@@ -175,4 +175,4 @@ function slider() {
     // console.log(clearingForNumbers(width));
 }
 
-module.exports = slider;
+export default slider;

@@ -1,7 +1,8 @@
-function timer() {
+function timer(id, deadline) {  //Lec_104 26:00
     ///// Timer.
     //Получение данных для таймера
-    const deadline = '2023-05-11';
+    // const deadline = '2023-05-11'; //Lec_104 26:00, удаляем т.к. есть deadline
+
     function getTimeRemeaning(endtime) {
         let days, hours, minutes, seconds;
         const t = Date.parse(endtime) - // Получим рез-т в мСек.
@@ -60,7 +61,7 @@ function timer() {
             }
         }
     }
-    setClock('.timer', deadline);
+    setClock(id, deadline); //Lec_104 26:00
 }
 
-module.exports = timer;
+export default timer;
