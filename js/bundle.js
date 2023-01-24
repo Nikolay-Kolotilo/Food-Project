@@ -1,12 +1,17 @@
 /******/ (() => { // webpackBootstrap
+/******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
 /***/ "./js/modules/calc.js":
 /*!****************************!*\
   !*** ./js/modules/calc.js ***!
   \****************************/
-/***/ ((module) => {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
 function calc() {
     //Calc Lec_97. 3:50
     const result = document.querySelector('.calculating__result span');
@@ -109,7 +114,7 @@ function calc() {
     getDinamicInformation('#weight');
     getDinamicInformation('#age');
 }
-module.exports = calc;
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (calc);
 
 /***/ }),
 
@@ -117,7 +122,14 @@ module.exports = calc;
 /*!*****************************!*\
   !*** ./js/modules/cards.js ***!
   \*****************************/
-/***/ ((module) => {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+// import { getResource } from "..servises/servises"; // Установлена библиотека Axios мз 91 урока
+
 
 function cards() {
     //// Лекция 79. Карточки продуктов меню.
@@ -176,13 +188,13 @@ function cards() {
     }
 
                 //Lec_90 17:50 Получение карточек меню с сервера.
-    const getResource = async (url) => {
+    /*const getResource = async (url) => {
         const res = await fetch(url);
         if (!res.ok) {
             throw new Error(`Could not fetch ${url}, status ${res.status}`);
         } 
         return await res.json(); 
-    };   
+    };   */
                 //Lec_90 21:25 Получение карточек меню с сервера.
     // getResource('http://localhost:3000/menu')//Lec_91 5:10
     //     .then(data => { // деструктуризация объекта
@@ -235,7 +247,7 @@ function cards() {
     // ).render();        
 }
 
-module.exports = cards;
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (cards);
 
 /***/ }),
 
@@ -243,12 +255,22 @@ module.exports = cards;
 /*!*****************************!*\
   !*** ./js/modules/forms.js ***!
   \*****************************/
-/***/ ((module) => {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-function forms() {
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _modal__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modal */ "./js/modules/modal.js");
+/* harmony import */ var _servises_servises__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../servises/servises */ "./js/servises/servises.js");
+
+
+
+
+function forms(formSelector, modalTimerId) { //Lec_104 17:50, 19:20 Довавляем аргумент modalTimerId после модульного разделения.
     // Forms
 
-    const forms = document.querySelectorAll('form');
+    const forms = document.querySelectorAll(formSelector);//Lec_104 19:20.
 
     const message = {
         loading: /*'Загрузка'$Лекция 85. 16:55.$*/'img/Forms/spinner.svg',   //Лекция 85. 16:55.
@@ -259,17 +281,8 @@ function forms() {
     forms.forEach(item => {
         bindPostData(item);
     });
-
-    const postData = async (url, data) => {//Lec_90 4:05
-        const res = await fetch(url, {//Lec_90 5:05
-            method: 'POST',
-            headers: {
-                'Content-type': 'application/json'
-            },
-            body: data
-        });
-        return await res.json(); 
-    };    
+    
+    //Lec_90 4:05. //Lec_104 20:25 Переносим postData из forms в servises.js
 
     function bindPostData(form) {
         form.addEventListener('submit', (e) => {
@@ -301,7 +314,7 @@ function forms() {
             //     },
             //     body: JSON.stringify(object)
             // })
-            postData('http://localhost:3000/requests', json) // Lec_90 11:25, 15:50
+            (0,_servises_servises__WEBPACK_IMPORTED_MODULE_1__.postData)('http://localhost:3000/requests', json) // Lec_90 11:25, 15:50
                 // .then(data => data.text()) // Lec_90 12:30
                 .then(data => {
                 console.log(data);
@@ -335,7 +348,7 @@ function forms() {
         const prevModalDilog = document.querySelector('.modal__dialog');
         prevModalDilog.classList.add('hide'); // Лекция 85. 4:10
 
-        openModal();
+        (0,_modal__WEBPACK_IMPORTED_MODULE_0__.openModal)('.modal', modalTimerId); //Lec_104 17:30. Довавляем аргумент '.modal' после модульного разделения.
         const thanksModal = document.createElement('div');
         thanksModal.classList.add('modal__dialog');
         thanksModal.innerHTML = `
@@ -349,7 +362,8 @@ function forms() {
             thanksModal.remove();
             prevModalDilog.classList.add('show');
             prevModalDilog.classList.remove('hide');
-            closeModal();
+            (0,_modal__WEBPACK_IMPORTED_MODULE_0__.closeModal)('.modal'); //Lec_104 17:10. Довавляем аргумент '.modal' после модульного разделения.
+            
         }, 5000);
         
     }
@@ -359,7 +373,7 @@ function forms() {
         .then(res => console.log(res));
 }
 
-module.exports = forms;
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (forms);
 
 /***/ }),
 
@@ -367,24 +381,47 @@ module.exports = forms;
 /*!*****************************!*\
   !*** ./js/modules/modal.js ***!
   \*****************************/
-/***/ ((module) => {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-function modal() {
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "closeModal": () => (/* binding */ closeModal),
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
+/* harmony export */   "openModal": () => (/* binding */ openModal)
+/* harmony export */ });
+function openModal(modalSelector, modalTimerId) {  // Лекция 73. 1:15. Lec_104 9:10 Добавляем modalSelector.
+    const modal = document.querySelector(modalSelector);//Lec_104 9:10 Добавляем modalSelector.
+    modal.classList.add('show');
+    modal.classList.remove('hide');  
+    document.body.style.overflow = ''; //72 - 7:55. Прокрутка при Закрытии окна.
+
+    console.log(modalTimerId);
+    if (modalTimerId) {
+        clearInterval(modalTimerId);        
+    }
+}
+
+function closeModal(modalSelector) { //72 - 15:00. Функция для повторяющегося кода. Lec_104 9:10 Добавляем modalSelector.
+    const modal = document.querySelector(modalSelector);//Lec_104 9:25 Добавляем modalSelector.
+    modal.classList.add('hide');
+    modal.classList.remove('show');  
+    document.body.style.overflow = ''; //72 - 7:55. Прокрутка при Закрытии окна.
+}
+
+
+
+function modal(triggerSelector, modalSelector, modalTimerId) { //Lec_104 8:10
     // Modal window. Лекция 72
     
-    const modalTrigger = document.querySelectorAll('[data-modal]'), //72 - 2:25. Кнопки открытия окна.
-        modal = document.querySelector('.modal')/*, //72 - 3:30. Само модальное окно.
+    const modalTrigger = document.querySelectorAll(triggerSelector), //72 - 2:25. Кнопки открытия окна.
+        modal = document.querySelector(modalSelector)/*, //72 - 3:30. Само модальное окно.
         modalCloseBtn = document.querySelector('[data-close]')$Лекция 85. 7:35$*/;  //72 - 3:45. Кнопка закрытия модального окна. 
 
-    function openModal() {       // Лекция 73. 1:15
-        modal.classList.add('show');
-        modal.classList.remove('hide');  
-        document.body.style.overflow = ''; //72 - 7:55. Прокрутка при Закрытии окна.
-        clearInterval(modalTimerId);
-    }
     
     modalTrigger.forEach(btn => {       //72 - 10:15. Перебор кнопок для псевдомассива.
-        btn.addEventListener('click', openModal);// => {72 - 4:05. Алгоритм работы, открытие окна. Лекция 73. 1:30 (openModal)           
+        btn.addEventListener('click', () => openModal(modalSelector, modalTimerId));// => {72 - 4:05. Алгоритм работы, открытие окна. Лекция 73. 1:30 (openModal)
+        /*Lec_104. 10:20. openModal заменяем на стрелочную функцию из-за ограничений обработчика событий:
+        () => openModal(modalSelector)*/ 
         // modal.classList.add('show');
         // modal.classList.remove('hide');    
         // document.body.style.overflow = 'hidden';//72 - 7:15. Прокрутка при открытом окне.
@@ -392,31 +429,24 @@ function modal() {
     });
 
 
-    function closeModal() {       //72 - 15:00. Функция для повторяющегося кода.
-        modal.classList.add('hide');
-        modal.classList.remove('show');  
-        document.body.style.overflow = ''; //72 - 7:55. Прокрутка при Закрытии окна.
-    }
 
     /*modalCloseBtn.addEventListener('click', closeModal);$Лекция 85. 7:35$*/ //72 - 6:05. Закрытие окна. 15:40 Оптимизация кода.
         
 
     modal.addEventListener('click', (e) => {  //72 - 11:30. Закрытие модального окна по клику вне самого окна.
         if (e.target === modal || e.target.getAttribute('data-close') == '') {  //Размер модального окна в Классе modal - составояет 100% высоты и ширины в CSS. $Лекция 85. 8:25$
-            closeModal();   //15:50 Оптимизация кода.
+            closeModal(modalSelector);   //15:50 Оптимизация кода.
         }
     });
     document.addEventListener('keydown', (e) => {  //72 - 16:06. Закрытие модального окна по клику 'Escape'.
         if (e.code == 'Escape' && modal.classList.contains('show')) {  
-            closeModal();   //15:50 Оптимизация кода.
+            closeModal(modalSelector);   //15:50 Оптимизация кода.
         }
     });
     
-    const modalTimerId = setTimeout(openModal, 50000);  //таймер всплытия модального окна. Лекция 73.
-
     function showModalByCcroll() {//Лекция 73. 3:50. 9:40.
         if (window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight) {
-            openModal();
+            openModal(modalSelector, modalTimerId);//Lec_104. 11:00.
             window.removeEventListener('scroll', showModalByCcroll);
         }        
     };
@@ -426,7 +456,9 @@ function modal() {
     }, {once: 'true'});//Лекция 73. 8:25.*/
 }
 
-module.exports = modal;
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (modal);
+
+
 
 /***/ }),
 
@@ -434,19 +466,23 @@ module.exports = modal;
 /*!******************************!*\
   !*** ./js/modules/slider.js ***!
   \******************************/
-/***/ ((module) => {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-function slider() {
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+function slider({container, slide, nextArrow, prevArrow, totalCounter, currentCounter, wrapper, field} ) { //Lec_104 29:00  Используем деструктуризацию.
     //Lec_92 Организация Слайдера. See lec 92 by myself.
     //Lec_93. Carousel (Взамен лекции 92.). Вариант слайдера в виде карусели.
-    const slides = document.querySelectorAll(".offer__slide"),
-        slider = document.querySelector('.offer__slider'), //Lec_94. 2:00 Создаем контейнер для слайдера.
-        prev = document.querySelector(".offer__slider-prev"),
-        next = document.querySelector(".offer__slider-next"),
-        total = document.querySelector('#total'),
-        current = document.querySelector('#current'),
-        slidesWrapper = document.querySelector('.offer__slider-wrapper'),
-        slidesField = document.querySelector('.offer__slider-inner'),
+    const slides = document.querySelectorAll(slide),
+        slider = document.querySelector(container), //Lec_94. 2:00 Создаем контейнер для слайдера.
+        prev = document.querySelector(prevArrow),
+        next = document.querySelector(nextArrow),
+        total = document.querySelector(totalCounter),
+        current = document.querySelector(currentCounter),
+        slidesWrapper = document.querySelector(wrapper),
+        slidesField = document.querySelector(field),
         width = window.getComputedStyle(slidesWrapper).width;
     
     let slideIndex = 1,
@@ -613,7 +649,7 @@ function slider() {
     // console.log(clearingForNumbers(width));
 }
 
-module.exports = slider;
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (slider);
 
 /***/ }),
 
@@ -621,12 +657,16 @@ module.exports = slider;
 /*!****************************!*\
   !*** ./js/modules/tabs.js ***!
   \****************************/
-/***/ ((module) => {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-function tabs() {
-    const tabs = document.querySelectorAll('.tabheader__item'),
-        tabsContent = document.querySelectorAll('.tabcontent'),
-        tabsParent = document.querySelector('.tabheader__items');
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+function tabs(tabsSelector, tabsContentSelector, tabsParentSelector, activeClass) { //23:25. Подставляем аргуметы в вызов функции в script
+    const tabs = document.querySelectorAll(tabsSelector),
+        tabsContent = document.querySelectorAll(tabsContentSelector),
+        tabsParent = document.querySelector(tabsParentSelector);
     
     function hideTabContent() {
         tabsContent.forEach(item => {
@@ -635,7 +675,7 @@ function tabs() {
         });
 
         tabs.forEach(item => {
-            item.classList.remove('tabheader__item_active');
+            item.classList.remove(activeClass);
         });
     }
     function showTabContent(i = 0) {
@@ -648,7 +688,7 @@ function tabs() {
 
     tabsParent.addEventListener('click', (event) => {
         const target = event.target;
-        if (target && target.classList.contains('tabheader__item')) {
+        if (target && target.classList.contains(tabsSelector.slice(1))) { //24:30. В script подставлен селектор с точкой, поэтому надо точку из аргумента убрать.
             tabs.forEach((item, i) => {
                 if (target == item) {
                     hideTabContent();
@@ -659,7 +699,7 @@ function tabs() {
     });
 }
 
-module.exports = tabs;
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (tabs);
 
 /***/ }),
 
@@ -667,12 +707,17 @@ module.exports = tabs;
 /*!*****************************!*\
   !*** ./js/modules/timer.js ***!
   \*****************************/
-/***/ ((module) => {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-function timer() {
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+function timer(id, deadline) {  //Lec_104 26:00
     ///// Timer.
     //Получение данных для таймера
-    const deadline = '2023-05-11';
+    // const deadline = '2023-05-11'; //Lec_104 26:00, удаляем т.к. есть deadline
+
     function getTimeRemeaning(endtime) {
         let days, hours, minutes, seconds;
         const t = Date.parse(endtime) - // Получим рез-т в мСек.
@@ -731,10 +776,46 @@ function timer() {
             }
         }
     }
-    setClock('.timer', deadline);
+    setClock(id, deadline); //Lec_104 26:00
 }
 
-module.exports = timer;
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (timer);
+
+/***/ }),
+
+/***/ "./js/servises/servises.js":
+/*!*********************************!*\
+  !*** ./js/servises/servises.js ***!
+  \*********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "postData": () => (/* binding */ postData)
+/* harmony export */ });
+const postData = async (url, data) => {//Lec_90 4:05. //Lec_104 20:25 Переносим postData из forms в servises.js
+    const res = await fetch(url, {//Lec_90 5:05
+        method: 'POST',
+        headers: {
+            'Content-type': 'application/json'
+        },
+        body: data
+    });
+    return await res.json(); 
+};    
+
+// const getResource = async (url) => { // Установлена библиотека Axios мз 91 урока
+//     const res = await fetch(url);
+//     if (!res.ok) {
+//         throw new Error(`Could not fetch ${url}, status ${res.status}`);
+//     } 
+//     return await res.json(); 
+// };   
+
+
+
+
+// export { getResource };
 
 /***/ })
 
@@ -765,35 +846,90 @@ module.exports = timer;
 /******/ 	}
 /******/ 	
 /************************************************************************/
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = (exports) => {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/************************************************************************/
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
 /*!**********************!*\
   !*** ./js/script.js ***!
   \**********************/
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _modules_tabs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modules/tabs */ "./js/modules/tabs.js");
+/* harmony import */ var _modules_timer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/timer */ "./js/modules/timer.js");
+/* harmony import */ var _modules_modal__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/modal */ "./js/modules/modal.js");
+/* harmony import */ var _modules_cards__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/cards */ "./js/modules/cards.js");
+/* harmony import */ var _modules_forms__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/forms */ "./js/modules/forms.js");
+/* harmony import */ var _modules_slider__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/slider */ "./js/modules/slider.js");
+/* harmony import */ var _modules_calc__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./modules/calc */ "./js/modules/calc.js");
+
+
+// Tabs
+ //Lec_102. webpack.//Lec_104 Изменения для export default: from.
+// Timer.
+
+// Modal window. Лекция 72
+
+// Карточки продуктов меню.Лекция 79.
+
+// Forms    
+
+// Lec_92 Организация Слайдера. See lec 92 by myself.
+// Lec_93. Carousel (Взамен лекции 92.). Вариант слайдера в виде карусели.
+
+// Calc Lec_97. 3:50
+
+//Lec_104 15:40
+
+
+
+
 window.addEventListener('DOMContentLoaded', () => {
-            // Tabs
-      const tabs = __webpack_require__(/*! ./modules/tabs */ "./js/modules/tabs.js"), //Lec_102. webpack.
-            // Timer.
-            timer = __webpack_require__(/*! ./modules/timer */ "./js/modules/timer.js"),
-            // Modal window. Лекция 72
-            modal = __webpack_require__(/*! ./modules/modal */ "./js/modules/modal.js"),
-            // Карточки продуктов меню.Лекция 79.
-            cards = __webpack_require__(/*! ./modules/cards */ "./js/modules/cards.js"),
-            // Forms    
-            forms = __webpack_require__(/*! ./modules/forms */ "./js/modules/forms.js"),
-            // Lec_92 Организация Слайдера. See lec 92 by myself.
-            // Lec_93. Carousel (Взамен лекции 92.). Вариант слайдера в виде карусели.
-            slider = __webpack_require__(/*! ./modules/slider */ "./js/modules/slider.js"),
-            // Calc Lec_97. 3:50
-            calc = __webpack_require__(/*! ./modules/calc */ "./js/modules/calc.js");
-      tabs(); //Lec_102. 24:25
-      timer();
-      modal();
-      cards();
-      forms();
-      slider();
-      calc();      
+
+      const modalTimerId = setTimeout(() => (0,_modules_modal__WEBPACK_IMPORTED_MODULE_2__.openModal)('.modal', modalTimerId), 50000);  //Lec_104 14:40
+      (0,_modules_tabs__WEBPACK_IMPORTED_MODULE_0__["default"])('.tabheader__item', '.tabcontent', '.tabheader__items', 'tabheader__item_active'); //Lec_102. 24:25 Lec_104 8: 23:25
+      (0,_modules_timer__WEBPACK_IMPORTED_MODULE_1__["default"])('.timer', '2023-05-11'); //Lec_104 25:35
+      (0,_modules_modal__WEBPACK_IMPORTED_MODULE_2__["default"])('[data-modal]', '.modal', modalTimerId); //Lec_104 8:40, 15:40
+      (0,_modules_cards__WEBPACK_IMPORTED_MODULE_3__["default"])();
+      (0,_modules_forms__WEBPACK_IMPORTED_MODULE_4__["default"])('form', modalTimerId);
+      (0,_modules_slider__WEBPACK_IMPORTED_MODULE_5__["default"])({ //Lec_104 30:00  Используем деструктуризацию, для передачи в модуль slider. Благодаря деструктуризации порядок не важен.
+            container: '.offer__slider',
+            slide: ".offer__slide",
+            nextArrow: ".offer__slider-next",
+            prevArrow: ".offer__slider-prev",
+            totalCounter: '#total',
+            currentCounter: '#current',
+            wrapper: '.offer__slider-wrapper',
+            field: '.offer__slider-inner'
+      });
+      (0,_modules_calc__WEBPACK_IMPORTED_MODULE_6__["default"])();      
 });
 
 

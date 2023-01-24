@@ -1,3 +1,6 @@
+// import { getResource } from "..servises/servises"; // Установлена библиотека Axios мз 91 урока
+
+
 function cards() {
     //// Лекция 79. Карточки продуктов меню.
 
@@ -55,13 +58,13 @@ function cards() {
     }
 
                 //Lec_90 17:50 Получение карточек меню с сервера.
-    const getResource = async (url) => {
+    /*const getResource = async (url) => {
         const res = await fetch(url);
         if (!res.ok) {
             throw new Error(`Could not fetch ${url}, status ${res.status}`);
         } 
         return await res.json(); 
-    };   
+    };   */
                 //Lec_90 21:25 Получение карточек меню с сервера.
     // getResource('http://localhost:3000/menu')//Lec_91 5:10
     //     .then(data => { // деструктуризация объекта
@@ -114,4 +117,4 @@ function cards() {
     // ).render();        
 }
 
-module.exports = cards;
+export default cards;

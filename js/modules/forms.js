@@ -1,7 +1,11 @@
-function forms() {
+import { openModal, closeModal } from "./modal";
+import { postData } from "../servises/servises";
+
+
+function forms(formSelector, modalTimerId) { //Lec_104 17:50, 19:20 Довавляем аргумент modalTimerId после модульного разделения.
     // Forms
 
-    const forms = document.querySelectorAll('form');
+    const forms = document.querySelectorAll(formSelector);//Lec_104 19:20.
 
     const message = {
         loading: /*'Загрузка'$Лекция 85. 16:55.$*/'img/Forms/spinner.svg',   //Лекция 85. 16:55.
@@ -12,17 +16,8 @@ function forms() {
     forms.forEach(item => {
         bindPostData(item);
     });
-
-    const postData = async (url, data) => {//Lec_90 4:05
-        const res = await fetch(url, {//Lec_90 5:05
-            method: 'POST',
-            headers: {
-                'Content-type': 'application/json'
-            },
-            body: data
-        });
-        return await res.json(); 
-    };    
+    
+    //Lec_90 4:05. //Lec_104 20:25 Переносим postData из forms в servises.js
 
     function bindPostData(form) {
         form.addEventListener('submit', (e) => {
@@ -88,7 +83,7 @@ function forms() {
         const prevModalDilog = document.querySelector('.modal__dialog');
         prevModalDilog.classList.add('hide'); // Лекция 85. 4:10
 
-        openModal();
+        openModal('.modal', modalTimerId); //Lec_104 17:30. Довавляем аргумент '.modal' после модульного разделения.
         const thanksModal = document.createElement('div');
         thanksModal.classList.add('modal__dialog');
         thanksModal.innerHTML = `
@@ -102,7 +97,8 @@ function forms() {
             thanksModal.remove();
             prevModalDilog.classList.add('show');
             prevModalDilog.classList.remove('hide');
-            closeModal();
+            closeModal('.modal'); //Lec_104 17:10. Довавляем аргумент '.modal' после модульного разделения.
+            
         }, 5000);
         
     }
@@ -112,4 +108,4 @@ function forms() {
         .then(res => console.log(res));
 }
 
-module.exports = forms;
+export default forms;
