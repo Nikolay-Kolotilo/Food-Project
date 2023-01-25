@@ -1,4 +1,5 @@
-
+require('es6-promise').polyfill();
+import 'nodelist-foreach-polyfill';
 
 // Tabs
 import tabs from './modules/tabs'; //Lec_102. webpack.//Lec_104 Изменения для export default: from.
